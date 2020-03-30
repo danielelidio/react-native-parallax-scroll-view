@@ -91,6 +91,7 @@ class ParallaxScrollView extends Component {
 			stickyHeaderHeight,
 			style,
 			contentContainerStyle,
+			innerContainerStyle,
 			outputScaleValue,
 			...scrollViewProps
 		} = this.props
@@ -114,7 +115,8 @@ class ParallaxScrollView extends Component {
 			contentBackgroundColor,
 			stickyHeaderHeight,
 			renderContentBackground,
-			contentContainerStyle
+			contentContainerStyle,
+			innerContainerStyle
 		})
 		const footerSpacer = this._renderFooterSpacer({ contentBackgroundColor })
 		const maybeStickyHeader = this._maybeRenderStickyHeader({
@@ -310,7 +312,7 @@ class ParallaxScrollView extends Component {
 
 	_wrapChildren(
 		children,
-		{ contentBackgroundColor, stickyHeaderHeight, contentContainerStyle, renderContentBackground }
+		{ contentBackgroundColor, stickyHeaderHeight, contentContainerStyle, innerContainerStyle, renderContentBackground }
 	) {
 		const { viewHeight } = this.state
 		const containerStyles = [{ backgroundColor: contentBackgroundColor }]
@@ -327,7 +329,12 @@ class ParallaxScrollView extends Component {
 
 		return (
 			<View
-				style={[containerStyles, { minHeight: this.containerHeight }]}
+				style={[containerStyles, {
+					minHeight: this.containerHeight,
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}]}
 				onLayout={e => {
 					// Adjust the bottom height so we can scroll the parallax header all the way up.
 					const { nativeEvent: { layout: { height } } } = e
@@ -343,8 +350,10 @@ class ParallaxScrollView extends Component {
 					}
 				}}
 			>
-				{renderContentBackground()}
-				{children}
+				<View style={innerContainerStyle}>
+					{renderContentBackground()}
+					{children}
+				</View>
 			</View>
 		)
 	}
