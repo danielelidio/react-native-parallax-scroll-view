@@ -350,8 +350,11 @@ class ParallaxScrollView extends Component {
 					}
 				}}
 			>
-				<View style={innerContainerStyle}>
-					{renderContentBackground()}
+				{renderContentBackground()}
+				<View style={[innerContainerStyle, {
+					position: 'absolute',
+					top: 0,
+				}]}>
 					{children}
 				</View>
 			</View>
